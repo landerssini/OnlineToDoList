@@ -6,11 +6,8 @@ import { List } from './List';
 import { AddTaskForm } from './AddTaskForm';
 import { ListIdDisplay } from './ListIdDisplay';
 import { ChangePublicLocalView } from './ChangePublicLocalView';
-import { MakeListPublicButton } from './MakeListPublicButton';
 import { ConnectToList } from './ConnectToList';
 import { MenuButton } from './MenuButton';
-import bgLocal from "./assets/bg-local.svg"
-import bgPublic from "./assets/bg-public.svg"
 export interface Item {
   title: string;
   completed: boolean
@@ -24,12 +21,7 @@ function App() {
   const [menuOpened, setMenuOpened] = useState<boolean>(false)
   const [localList, setLocalList] = useState<boolean>(true)
   const [publicListCode, setPublicListCode] = useState<string>("")
-  const [errors, setErrors] = useState<Errors>({
-    ConvertToPublicBtn: "",
-    NoListFoundError: "",
-    // ConvertToPublicBtn: "",
-    // ConvertToPublicBtn: ""
-  })
+
   const [list, setList] = useState<Item[]>([])
   const { paramListCode } = useParams()
   const navigate = useNavigate()
