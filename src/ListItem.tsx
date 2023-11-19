@@ -12,7 +12,7 @@ interface ListItemProps {
 }
 export const ListItem: React.FC<ListItemProps> = ({ item, handleDeleteListItem, handleChangeCompletedTask }) => {
     return (
-        <li className={`flex p-3 h-[5vh] items-center bg-white rounded-xl gap-3 ${item.completed ? 'bg-opacity-60 transition-opacity duration-300 ease-in-out ' : 'bg-opacity-100 transition-opacity duration-300 ease-in-out'}`}>
+        <li className={`flex p-3 h-14 items-center bg-white rounded-xl gap-3 ${item.completed ? 'bg-opacity-60 transition-opacity duration-300 ease-in-out ' : 'bg-opacity-100 transition-opacity duration-300 ease-in-out'}`}>
             <p className='truncate flex-1 p-2'>{item.title}</p>
             <button className='' onClick={() => handleChangeCompletedTask(item.id)}>
                 <img src={item.completed ? checkBoxFilled : checkBoxEmpty} alt="" className='' />
