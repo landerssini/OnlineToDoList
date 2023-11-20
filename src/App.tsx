@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom';
-import { addToList, changeCompletedTask, deleteFromList, fromLocalToPublicList, getPublicList } from './API/ToDoListAPI';
-import { ListItem } from './Components/Main/ListItem';
-import { List } from './Components/Main/List';
-import { AddTaskForm } from './Components/Main/AddTaskForm';
-import { ListIdDisplay } from './Components/Main/ListIdDisplay';
-import { ChangePublicLocalView } from './Components/Menu/ChangePublicLocalView';
-import { ConnectToList } from './Components/Menu/ConnectToList';
-import { MenuButton } from './Components/Menu/MenuButton';
-import { Background } from './Components/General/Background';
-import toast from 'react-hot-toast';
-import { CustomToast } from './Components/General/CustomToast';
+import { useNavigate, useParams } from 'react-router-dom'
+import { addToList, changeCompletedTask, deleteFromList, fromLocalToPublicList, getPublicList } from './API/ToDoListAPI'
+import { ListItem } from './Components/Main/ListItem'
+import { List } from './Components/Main/List'
+import { AddTaskForm } from './Components/Main/AddTaskForm'
+import { ListIdDisplay } from './Components/Main/ListIdDisplay'
+import { ChangePublicLocalView } from './Components/Menu/ChangePublicLocalView'
+import { ConnectToList } from './Components/Menu/ConnectToList'
+import { MenuButton } from './Components/Menu/MenuButton'
+import { Background } from './Components/General/Background'
+import toast from 'react-hot-toast'
+import { CustomToast } from './Components/General/CustomToast'
 
 export interface Item {
-  title: string;
+  title: string
   completed: boolean
   id: `${string}-${string}-${string}-${string}-${string}`
 }
@@ -74,7 +74,7 @@ function App() {
   */
   const refreshList = async () => {
     const response = await getPublicList(publicListCode)
-    setList(response.list.items);
+    setList(response.list.items)
   }
 
   /**
@@ -93,7 +93,7 @@ function App() {
       setLocalList(false)
       setMenuOpened(false)
       const response = await getPublicList(publicListCode)
-      setList(response.list.items);
+      setList(response.list.items)
       toast.custom((t) => (
         <CustomToast t={t} error={false}>
           Changed to {publicListCode} list
@@ -159,7 +159,7 @@ function App() {
         } else {
           toast.custom((t) => (
             <CustomToast t={t} error={true}>
-              Error occurred; please try again.
+              Error occurred, please try again.
             </CustomToast>
           ), {
             duration: 1000
@@ -178,14 +178,14 @@ function App() {
   const handleChangeCompletedTask = (id: Item["id"]) => {
     const updatedList = list.map((item) =>
       item.id === id ? { ...item, completed: !item.completed } : item
-    );
+    )
 
     const modifiedList = updatedList.sort((a, b) => {
-      if (a.completed && !b.completed) return 1;
-      if (!a.completed && b.completed) return -1;
-      return 0;
+      if (a.completed && !b.completed) return 1
+      if (!a.completed && b.completed) return -1
+      return 0
     })
-    setList(modifiedList);
+    setList(modifiedList)
     if (localList) {
       localStorage.setItem("LOCALToDoList", JSON.stringify(modifiedList))
       toast.custom((t) => (
@@ -198,8 +198,7 @@ function App() {
     } else {
       const updateItemCompletion = async () => {
         const taskToChange = list.find(task => task.id == id)
-        const response = await changeCompletedTask(publicListCode, id, !taskToChange!.completed);
-        console.log(response);
+        const response = await changeCompletedTask(publicListCode, id, !taskToChange!.completed)
         if (response.ok) {
           toast.custom((t) => (
             <CustomToast t={t} error={false}>
@@ -211,17 +210,17 @@ function App() {
         } else {
           toast.custom((t) => (
             <CustomToast t={t} error={true}>
-              Error occurred; please try again.
+              Error occurred, please try again.
             </CustomToast>
           ), {
             duration: 1000
           })
         }
-        await refreshList();
-      };
-      updateItemCompletion();
+        await refreshList()
+      }
+      updateItemCompletion()
     }
-  };
+  }
 
   /**
    * Handles the submission of the list code form.
@@ -289,7 +288,7 @@ function App() {
       } else {
         toast.custom((t) => (
           <CustomToast t={t} error={true}>
-            Error occurred while trying to make this list public; please try again.
+            Error occurred while trying to make this list public, please try again.
           </CustomToast>
         ), {
           duration: 1000
@@ -315,7 +314,7 @@ function App() {
       id: crypto.randomUUID()
     }
     if (localList) {
-      localStorage.setItem("LOCALToDoList", JSON.stringify([...list, newItem]));
+      localStorage.setItem("LOCALToDoList", JSON.stringify([...list, newItem]))
       setList((prevList) => {
         return [...prevList, newItem]
       })
@@ -325,7 +324,23 @@ function App() {
       })
       const addItemToList = async () => {
         const response = await addToList(publicListCode, newItem)
-        console.log(response);
+        if (response.ok) {
+          toast.custom((t) => (
+            <CustomToast t={t} error={false}>
+              Task added.
+            </CustomToast>
+          ), {
+            duration: 1000
+          })
+        } else {
+          toast.custom((t) => (
+            <CustomToast t={t} error={true}>
+               Error occurred, please try again.
+            </CustomToast>
+          ), {
+            duration: 1000
+          })
+        }
         await refreshList()
       }
       addItemToList()

@@ -1,9 +1,9 @@
 import React, { ReactNode } from 'react'
-import toast, { Toast } from 'react-hot-toast';
+import toast, { Toast } from 'react-hot-toast'
 
 interface CustomToastProps {
-    t: Toast;
-    children: ReactNode;
+    t: Toast
+    children: ReactNode
     error: boolean
 }
 
