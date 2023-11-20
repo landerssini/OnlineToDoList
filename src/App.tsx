@@ -67,7 +67,7 @@ function App() {
         setList([])
       }
     }
-  }, [])
+  }, [localList])
 
   /**
   * Refreshes the public list data.
@@ -187,7 +187,7 @@ function App() {
     })
     setList(modifiedList);
     if (localList) {
-      localStorage.setItem("LOCALToDoList", JSON.stringify([modifiedList]))
+      localStorage.setItem("LOCALToDoList", JSON.stringify(modifiedList))
       toast.custom((t) => (
         <CustomToast t={t} error={false}>
           Changes have been applied.
