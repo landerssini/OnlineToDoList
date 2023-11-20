@@ -39,7 +39,9 @@ function App() {
             <CustomToast t={t} error={true}>
               There is no list with that code. ({paramListCode})
             </CustomToast>
-          ))
+          ), {
+            duration: 1000
+          })
           navigate(`/`)
           return
         } else {
@@ -96,7 +98,9 @@ function App() {
         <CustomToast t={t} error={false}>
           Changed to {publicListCode} list
         </CustomToast>
-      ))
+      ), {
+        duration: 1000
+      })
     } else {
       return
     }
@@ -120,7 +124,9 @@ function App() {
       <CustomToast t={t} error={false}>
         Changed to Local list
       </CustomToast>
-    ))
+    ), {
+      duration: 1000
+    })
   }
 
   /**
@@ -136,7 +142,9 @@ function App() {
         <CustomToast t={t} error={false}>
           Changes have been applied.
         </CustomToast>
-      ))
+      ), {
+        duration: 1000
+      })
     } else {
       const deleteItemFromList = async () => {
         const response = await deleteFromList(publicListCode, id)
@@ -145,13 +153,17 @@ function App() {
             <CustomToast t={t} error={false}>
               Changes have been applied.
             </CustomToast>
-          ))
+          ), {
+            duration: 1000
+          })
         } else {
           toast.custom((t) => (
             <CustomToast t={t} error={true}>
               Error occurred; please try again.
             </CustomToast>
-          ))
+          ), {
+            duration: 1000
+          })
         }
         await refreshList()
       }
@@ -180,7 +192,9 @@ function App() {
         <CustomToast t={t} error={false}>
           Changes have been applied.
         </CustomToast>
-      ))
+      ), {
+        duration: 1000
+      })
     } else {
       const updateItemCompletion = async () => {
         const taskToChange = list.find(task => task.id == id)
@@ -191,13 +205,17 @@ function App() {
             <CustomToast t={t} error={false}>
               Changes have been applied.
             </CustomToast>
-          ))
+          ), {
+            duration: 1000
+          })
         } else {
           toast.custom((t) => (
             <CustomToast t={t} error={true}>
               Error occurred; please try again.
             </CustomToast>
-          ))
+          ), {
+            duration: 1000
+          })
         }
         await refreshList();
       };
@@ -222,7 +240,9 @@ function App() {
         <CustomToast t={t} error={true}>
           There is no list with that code.
         </CustomToast>
-      ))
+      ), {
+        duration: 1000
+      })
       return
     }
     navigate(`/${inputListCode}`)
@@ -231,7 +251,9 @@ function App() {
       <CustomToast t={t} error={false}>
         Connected to {inputListCode}
       </CustomToast>
-    ))
+    ), {
+      duration: 1000
+    })
     input.value = ""
   }
 
@@ -245,7 +267,9 @@ function App() {
           <CustomToast t={t} error={true}>
             Add at least one task to the list.
           </CustomToast>
-        ))
+        ), {
+          duration: 1000
+        })
         return
       }
       const response = await fromLocalToPublicList(list)
@@ -259,13 +283,17 @@ function App() {
           <CustomToast t={t} error={false}>
             List public code: {response.newListId}
           </CustomToast>
-        ))
+        ), {
+          duration: 1000
+        })
       } else {
         toast.custom((t) => (
           <CustomToast t={t} error={true}>
             Error occurred while trying to make this list public; please try again.
           </CustomToast>
-        ))
+        ), {
+          duration: 1000
+        })
       }
     }
   }
@@ -307,7 +335,7 @@ function App() {
   return (
     <>
       <div className={`md:flex md:items-center md:justify-center md:gap-3 bg-center bg-cover transition-all `}>
-        <div className={` absolute top-3 left-3 transition-all duration-500 ease-in-out overflow-auto bg-white md:bg-opacity-60 flex items-center justify-center ${menuOpened ? "h-1/3 p-3 rounded-xl w-3/4 " : "rounded-3xl h-[6.5vh] w-[6.5vh]"} md:static md:w-fit md:h-fit md:p-7 z-30`} >
+        <div className={` absolute top-3 left-3 transition-all duration-500 ease-in-out overflow-auto bg-white md:bg-opacity-60 flex items-center justify-center ${menuOpened ? "h-1/3 p-3 rounded-xl w-3/4 " : "rounded-3xl h-[6.5vh] w-[6.5vh] bg-opacity-0"} md:static md:w-fit md:h-fit md:p-7 z-30`} >
           <div className={`overflow-auto flex flex-col items-center relative transition-all md:flex md:gap-3 gap-3 ${menuOpened ? "" : "hidden "}`}>
             <ConnectToList handleSubmitListCode={handleSubmitListCode} />
             <ChangePublicLocalView handleConvertToPublic={handleConvertToPublic} handleChangeLocal={handleChangeLocal} handleChangePublic={handleChangePublic} localList={localList} publicListCode={publicListCode} />
