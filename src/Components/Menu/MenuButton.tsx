@@ -1,6 +1,6 @@
 import React from 'react'
-import closeButtonIcon from "./assets/closeButton.svg"
-import menuButtonIcon from "./assets/menuButton.svg"
+import closeButtonIcon from "../../assets/closeButton.svg"
+import menuButtonIcon from "../../assets/menuButton.svg"
 
 interface MenuButtonProps {
     menuOpened: boolean
