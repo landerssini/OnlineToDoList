@@ -26,6 +26,9 @@ function App() {
   const { paramListCode } = useParams()
   const navigate = useNavigate()
 
+  /**
+ * Fetches data for the public list when the component mounts.
+ */
   useEffect(() => {
     if (paramListCode) {
       const getListData = async () => {
@@ -49,6 +52,9 @@ function App() {
     }
   }, [paramListCode])
 
+  /**
+ * Loads the local list from localStorage when the component mounts.
+ */
   useEffect(() => {
     if (localList) {
       const localListData = localStorage.getItem("LOCALToDoList")
@@ -61,14 +67,24 @@ function App() {
     }
   }, [])
 
+  /**
+  * Refreshes the public list data.
+  */
   const refreshList = async () => {
     const response = await getPublicList(publicListCode)
     setList(response.list.items);
   }
 
+  /**
+ * Toggles the menu's open/closed state.
+ */
   const handleClickMenu = () => {
     setMenuOpened(!menuOpened)
   }
+
+  /**
+   * Changes the view to the selected public list.
+   */
   const handleChangePublic = async () => {
     if (publicListCode) {
       navigate(`/${publicListCode}`)
@@ -85,6 +101,10 @@ function App() {
       return
     }
   }
+
+  /**
+ * Changes the view to the local list.
+ */
   const handleChangeLocal = () => {
     navigate("/")
     setLocalList(true)
@@ -103,6 +123,10 @@ function App() {
     ))
   }
 
+  /**
+ * Deletes an item from the list.
+ * @param {Item["id"]} id - The unique identifier of the item to be deleted.
+ */
   const handleDeleteListItem = (id: Item["id"]) => {
     const filteredList = list.filter((item) => item.id !== id)
     setList(filteredList)
@@ -135,6 +159,10 @@ function App() {
     }
   }
 
+  /**
+   * Changes the completion status of a task in the list.
+   * @param {Item["id"]} id - The unique identifier of the task.
+   */
   const handleChangeCompletedTask = (id: Item["id"]) => {
     const updatedList = list.map((item) =>
       item.id === id ? { ...item, completed: !item.completed } : item
@@ -177,6 +205,10 @@ function App() {
     }
   };
 
+  /**
+   * Handles the submission of the list code form.
+   * @param {React.FormEvent<HTMLFormElement>} event - The form submission event.
+   */
   const handleSubmitListCode = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const { elements } = event.currentTarget
@@ -203,6 +235,9 @@ function App() {
     input.value = ""
   }
 
+  /**
+ * Converts the local list to a public list.
+ */
   const handleConvertToPublic = async () => {
     if (localList) {
       if (list.length == 0) {
@@ -234,8 +269,12 @@ function App() {
       }
     }
   }
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 
+  /**
+ * Handles the submission of the item form.
+ * @param {React.FormEvent<HTMLFormElement>} event - The form submission event.
+ */
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const { elements } = event.currentTarget
     const input = elements.namedItem("addItem")
