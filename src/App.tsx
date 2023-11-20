@@ -28,16 +28,22 @@ function App() {
 
   useEffect(() => {
     if (paramListCode) {
-      setLocalList(false)
-      setPublicListCode(paramListCode)
       const getListData = async () => {
         const response = await getPublicList(paramListCode)
         if (!response.ok) {
           setList([])
-          // NoListFoundError
+          toast.custom((t) => (
+            <CustomToast t={t} error={true}>
+              There is no list with that code. ({paramListCode})
+            </CustomToast>
+          ))
+          navigate(`/`)
           return
+        } else {
+          setLocalList(false)
+          setPublicListCode(paramListCode)
+          setList(response.list.items)
         }
-        setList(response.list.items)
       }
       getListData()
     }
