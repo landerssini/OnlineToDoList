@@ -8,9 +8,9 @@ import { ListIdDisplay } from './Components/Main/ListIdDisplay';
 import { ChangePublicLocalView } from './Components/Menu/ChangePublicLocalView';
 import { ConnectToList } from './Components/Menu/ConnectToList';
 import { MenuButton } from './Components/Menu/MenuButton';
-import { Background } from './Background';
+import { Background } from './Components/General/Background';
 import toast from 'react-hot-toast';
-import { CustomToast } from './CustomToast';
+import { CustomToast } from './Components/General/CustomToast';
 
 export interface Item {
   title: string;
