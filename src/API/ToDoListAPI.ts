@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { Item } from "../App"
-const url = "https://onlinetodolist.onrender.com"
-// const url = "http://localhost:5174"
+// const url = "https://onlinetodolist.onrender.com"
+const url = "http://localhost:5174"
 export const getPublicList = async (listid: string) => {
     try {
         console.log(listid);

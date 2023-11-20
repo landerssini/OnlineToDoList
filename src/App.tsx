@@ -8,20 +8,20 @@ import { ListIdDisplay } from './ListIdDisplay';
 import { ChangePublicLocalView } from './ChangePublicLocalView';
 import { ConnectToList } from './ConnectToList';
 import { MenuButton } from './MenuButton';
+import { Background } from './Background';
+import toast from 'react-hot-toast';
+import { CustomToast } from './CustomToast';
+
 export interface Item {
   title: string;
   completed: boolean
   id: `${string}-${string}-${string}-${string}-${string}`
 }
-export interface Errors {
-  ConvertToPublicBtn: string,
-  NoListFoundError: string
-}
+
 function App() {
   const [menuOpened, setMenuOpened] = useState<boolean>(false)
   const [localList, setLocalList] = useState<boolean>(true)
   const [publicListCode, setPublicListCode] = useState<string>("")
-
   const [list, setList] = useState<Item[]>([])
   const { paramListCode } = useParams()
   const navigate = useNavigate()
@@ -57,16 +57,11 @@ function App() {
 
   const refreshList = async () => {
     const response = await getPublicList(publicListCode)
-    console.log(response);
-
     setList(response.list.items);
-
   }
-
 
   const handleClickMenu = () => {
     setMenuOpened(!menuOpened)
-
   }
   const handleChangePublic = async () => {
     if (publicListCode) {
@@ -75,6 +70,11 @@ function App() {
       setMenuOpened(false)
       const response = await getPublicList(publicListCode)
       setList(response.list.items);
+      toast.custom((t) => (
+        <CustomToast t={t} error={false}>
+          Changed to {publicListCode} list
+        </CustomToast>
+      ))
     } else {
       return
     }
@@ -90,6 +90,11 @@ function App() {
       setList([])
     }
     setMenuOpened(false)
+    toast.custom((t) => (
+      <CustomToast t={t} error={false}>
+        Changed to Local list
+      </CustomToast>
+    ))
   }
 
   const handleDeleteListItem = (id: Item["id"]) => {
@@ -97,10 +102,27 @@ function App() {
     setList(filteredList)
     if (localList) {
       localStorage.setItem("LOCALToDoList", JSON.stringify(filteredList))
+      toast.custom((t) => (
+        <CustomToast t={t} error={false}>
+          Changes have been applied.
+        </CustomToast>
+      ))
     } else {
       const deleteItemFromList = async () => {
         const response = await deleteFromList(publicListCode, id)
-        console.log(response);
+        if (response.ok) {
+          toast.custom((t) => (
+            <CustomToast t={t} error={false}>
+              Changes have been applied.
+            </CustomToast>
+          ))
+        } else {
+          toast.custom((t) => (
+            <CustomToast t={t} error={true}>
+              Error occurred; please try again.
+            </CustomToast>
+          ))
+        }
         await refreshList()
       }
       deleteItemFromList()
@@ -120,11 +142,29 @@ function App() {
     setList(modifiedList);
     if (localList) {
       localStorage.setItem("LOCALToDoList", JSON.stringify([modifiedList]))
+      toast.custom((t) => (
+        <CustomToast t={t} error={false}>
+          Changes have been applied.
+        </CustomToast>
+      ))
     } else {
       const updateItemCompletion = async () => {
         const taskToChange = list.find(task => task.id == id)
         const response = await changeCompletedTask(publicListCode, id, !taskToChange!.completed);
         console.log(response);
+        if (response.ok) {
+          toast.custom((t) => (
+            <CustomToast t={t} error={false}>
+              Changes have been applied.
+            </CustomToast>
+          ))
+        } else {
+          toast.custom((t) => (
+            <CustomToast t={t} error={true}>
+              Error occurred; please try again.
+            </CustomToast>
+          ))
+        }
         await refreshList();
       };
       updateItemCompletion();
@@ -137,19 +177,34 @@ function App() {
     const input = elements.namedItem("listCode")
     const isInput = input instanceof HTMLInputElement
     if (!isInput || input == null) return
-    const response = await getPublicList(input.value)
+    const inputListCode = input.value
+    const response = await getPublicList(inputListCode)
     if (!response.ok) {
-      // NO LIST WITH THAT CODE ERROR
+      toast.custom((t) => (
+        <CustomToast t={t} error={true}>
+          There is no list with that code.
+        </CustomToast>
+      ))
       return
     }
-    navigate(`/${input.value}`)
+    navigate(`/${inputListCode}`)
     setMenuOpened(false)
+    toast.custom((t) => (
+      <CustomToast t={t} error={false}>
+        Connected to {inputListCode}
+      </CustomToast>
+    ))
     input.value = ""
   }
 
   const handleConvertToPublic = async () => {
     if (localList) {
       if (list.length == 0) {
+        toast.custom((t) => (
+          <CustomToast t={t} error={true}>
+            Add at least one task to the list.
+          </CustomToast>
+        ))
         return
       }
       const response = await fromLocalToPublicList(list)
@@ -159,21 +214,28 @@ function App() {
         navigate(`/${response.newListId}`)
         setLocalList(false)
         setMenuOpened(false)
+        toast.custom((t) => (
+          <CustomToast t={t} error={false}>
+            List public code: {response.newListId}
+          </CustomToast>
+        ))
       } else {
-        console.log("Error");
-        console.log(response);
-
+        toast.custom((t) => (
+          <CustomToast t={t} error={true}>
+            Error occurred while trying to make this list public; please try again.
+          </CustomToast>
+        ))
       }
     }
   }
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+
     event.preventDefault()
     const { elements } = event.currentTarget
     const input = elements.namedItem("addItem")
     const isInput = input instanceof HTMLInputElement
     if (!isInput || input == null) return
-
-
+    
     const newItem: Item = {
       title: input.value,
       completed: false,
@@ -195,7 +257,6 @@ function App() {
       }
       addItemToList()
     }
-
     input.value = ""
   }
   return (
@@ -208,7 +269,6 @@ function App() {
           </div>
           <div className='flex items-center justify-center bg'>
             <MenuButton handleClickMenu={handleClickMenu} menuOpened={menuOpened} />
-
           </div>
         </div>
         <div className=' h-screen flex gap-3 flex-col items-center justify-center relative md:w-1/3 z-20'>
@@ -222,10 +282,7 @@ function App() {
               : <p>Loading...</p>}
           </List>
         </div>
-        <div className='absolute top-0 left-0 z-0 h-full w-full'>
-          <div className={`absolute top-0 left-0 bg-[url("./assets/bg-local.svg")] w-full h-full bg-cover bg-center z-10 transition-opacity duration-300 ${localList ? "opacity-100" : "opacity-0"}`}></div>
-          <div className='absolute top-0 left-0 bg-[url("./assets/bg-public.svg")] w-full h-full bg-cover bg-center z-0'></div>
-        </div>
+        <Background localList={localList} />
       </div>
     </>
   )
