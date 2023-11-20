@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import { addToList, changeCompletedTask, deleteFromList, fromLocalToPublicList, getPublicList } from './API/ToDoListAPI';
-import { ListItem } from './ListItem';
-import { List } from './List';
-import { AddTaskForm } from './AddTaskForm';
-import { ListIdDisplay } from './ListIdDisplay';
-import { ChangePublicLocalView } from './ChangePublicLocalView';
-import { ConnectToList } from './ConnectToList';
-import { MenuButton } from './MenuButton';
+import { ListItem } from './Components/Main/ListItem';
+import { List } from './Components/Main/List';
+import { AddTaskForm } from './Components/Main/AddTaskForm';
+import { ListIdDisplay } from './Components/Main/ListIdDisplay';
+import { ChangePublicLocalView } from './Components/Menu/ChangePublicLocalView';
+import { ConnectToList } from './Components/Menu/ConnectToList';
+import { MenuButton } from './Components/Menu/MenuButton';
 import { Background } from './Background';
 import toast from 'react-hot-toast';
 import { CustomToast } from './CustomToast';
@@ -235,7 +235,7 @@ function App() {
     const input = elements.namedItem("addItem")
     const isInput = input instanceof HTMLInputElement
     if (!isInput || input == null) return
-    
+
     const newItem: Item = {
       title: input.value,
       completed: false,
