@@ -1,7 +1,7 @@
 import React from 'react'
-import deleteIcon from "./assets/delete.svg"
-import checkBoxEmpty from "./assets/checkBoxEmpty.svg"
-import checkBoxFilled from "./assets/checkBoxFilled.svg"
+import deleteIcon from "../../assets/delete.svg"
+import checkBoxEmpty from "../../assets/checkBoxEmpty.svg"
+import checkBoxFilled from "../../assets/checkBoxFilled.svg"
 import { Item } from '../../App';
 
 interface ListItemProps {
