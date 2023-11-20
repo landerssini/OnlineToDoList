@@ -3,7 +3,7 @@
 
 This project is a ToDo List application built using React. It allows users to manage their tasks in both local and public lists. Users can add, delete, and mark tasks as completed. Additionally, the app supports the creation of public lists that can be shared with others.
 
-
+Netlify: [Deploy](https://online-todolist-landerssini.netlify.app/)
 
 
 ## Screenshots
